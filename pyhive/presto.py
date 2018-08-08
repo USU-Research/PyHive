@@ -18,6 +18,7 @@ import getpass
 import logging
 import requests
 from requests.auth import HTTPBasicAuth
+import os
 
 try:  # Python 3
     import urllib.parse as urlparse
@@ -180,6 +181,9 @@ class Cursor(common.DBAPICursor):
             'X-Presto-Source': self._source,
             'X-Presto-User': self._username,
         }
+
+        if 'TZ' in os.environ:
+            headers['X-Presto-Time-Zone'] = os.environ['TZ']
 
         if self._session_props:
             headers['X-Presto-Session'] = ','.join(
